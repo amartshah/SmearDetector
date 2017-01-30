@@ -1,6 +1,8 @@
 import numpy as np
 import cv2
 import os, os.path
+from matplotlib import pyplot as plt
+
 
 #main folder
 path = 'sample_drive'
@@ -33,5 +35,15 @@ for folder in os.listdir(path):
             camera_images[folder].append(img)
             counter += 1
     
-print camera_images
-            
+#basic logic for canny edge detection
+for camera in camera_images:
+    for i in xrange(len(camera)):
+        img = camera_images[camera][i]
+        edges = cv2.Canny(img,100,200)
+        print edges
+        plt.subplot(121),plt.imshow(img,cmap = 'gray')
+        plt.title('Original Image'), plt.xticks([]), plt.yticks([])
+        plt.subplot(122),plt.imshow(edges,cmap = 'gray')
+        plt.title('Edge Image'), plt.xticks([]), plt.yticks([])
+
+        #plt.show()            
