@@ -26,7 +26,7 @@ for folder in os.listdir(path):
     else:
         counter = 0
         for pic in os.listdir(path+ '/' + folder):
-            if counter == 10:
+            if counter == 30:
                 break
             #full path
             pic_path = path+ '/' + folder + '/' + pic
@@ -35,15 +35,24 @@ for folder in os.listdir(path):
             camera_images[folder].append(img)
             counter += 1
     
+masks = []
 #basic logic for canny edge detection
 for camera in camera_images:
+    canny_images = []
     for i in xrange(len(camera)):
         img = camera_images[camera][i]
         edges = cv2.Canny(img,100,200)
-        print edges
-        plt.subplot(121),plt.imshow(img,cmap = 'gray')
-        plt.title('Original Image'), plt.xticks([]), plt.yticks([])
-        plt.subplot(122),plt.imshow(edges,cmap = 'gray')
-        plt.title('Edge Image'), plt.xticks([]), plt.yticks([])
+        #print edges
+        canny_images.append(edges)
+    
+    average = np.average(canny_images, axis=0)
+    masks.append(average)
+        
+        
+for mask in masks:
+    #plt.subplot(121),plt.imshow(img,cmap = 'gray')
+    #plt.title('Original Image'), plt.xticks([]), plt.yticks([])
+    plt.imshow(mask,cmap = 'gray')
+    plt.title('Edge Image'), plt.xticks([]), plt.yticks([])
 
-        #plt.show()            
+    plt.show()            
