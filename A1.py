@@ -2,6 +2,8 @@ import numpy as np
 import cv2
 import os, os.path
 from matplotlib import pyplot as plt
+import scipy.ndimage as ndi
+from skimage import filters
 
 
 #main folder
@@ -50,9 +52,35 @@ for camera in camera_images:
         
         
 for mask in masks:
-    #plt.subplot(121),plt.imshow(img,cmap = 'gray')
-    #plt.title('Original Image'), plt.xticks([]), plt.yticks([])
+    mask = mask.astype(np.uint8)
+
+    mask = ndi.gaussian_filter(mask, (10,10))
+    
+    # blur = cv2.GaussianBlur(mask,(5,5),0)
+    #ret3,th3 = cv2.threshold(blur,0,255,cv2.THRESH_BINARY+cv2.THRESH_OTSU)
+    # image_final, contours, hierarchy = cv2.findContours(th3,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
+    # mask = cv2.drawContours(image_final, contours, -1, (0,255,0), 3)
+    
+    #####UNCOMMENT BELOW FOR AN ATTEMPT AT FOREGROUND IDENTIFICATION
+    # ret, thresh = cv2.threshold(mask,0,255,cv2.THRESH_BINARY_INV+cv2.THRESH_OTSU)
+    # # noise removal
+    # kernel = np.ones((3,3),np.uint8)
+    # opening = cv2.morphologyEx(thresh,cv2.MORPH_OPEN,kernel, iterations = 2)
+    #
+    # # sure background area
+    # sure_bg = cv2.dilate(opening,kernel,iterations=3)
+    #
+    # # Finding sure foreground area
+    # dist_transform = cv2.distanceTransform(opening,cv2.DIST_L2,5)
+    # ret, sure_fg = cv2.threshold(dist_transform,0.7*dist_transform.max(),255,0)
+    #
+    # # Finding unknown region
+    # sure_fg = np.uint8(sure_fg)
+    # unknown = cv2.subtract(sure_bg,sure_fg)
+    # plt.imshow(sure_fg,cmap = 'gray')
+
+
     plt.imshow(mask,cmap = 'gray')
-    plt.title('Edge Image'), plt.xticks([]), plt.yticks([])
+    plt.title('Camera Mask'), plt.xticks([]), plt.yticks([])
 
     plt.show()            
