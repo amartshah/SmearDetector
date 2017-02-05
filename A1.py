@@ -3,7 +3,7 @@ import cv2
 import os, os.path
 from matplotlib import pyplot as plt
 import scipy.ndimage as ndi
-from skimage import filters
+#from skimage import filters
 
 
 #main folder
@@ -55,11 +55,14 @@ for mask in masks:
     mask = mask.astype(np.uint8)
 
     mask = ndi.gaussian_filter(mask, (10,10))
-    
+    mask = cv2.medianBlur(mask, 111)
+
     # blur = cv2.GaussianBlur(mask,(5,5),0)
-    #ret3,th3 = cv2.threshold(blur,0,255,cv2.THRESH_BINARY+cv2.THRESH_OTSU)
-    # image_final, contours, hierarchy = cv2.findContours(th3,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
-    # mask = cv2.drawContours(image_final, contours, -1, (0,255,0), 3)
+    ret4,th4 = cv2.threshold(mask,1,1,cv2.THRESH_BINARY)
+
+    #ret3,th3 = cv2.threshold(mask,0,255,cv2.THRESH_BINARY+cv2.THRESH_OTSU)
+    #image_final, contours, hierarchy = cv2.findContours(th4,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
+    #mask = cv2.drawContours(image_final, contours, -1, (0,255,0), 3)
     
     #####UNCOMMENT BELOW FOR AN ATTEMPT AT FOREGROUND IDENTIFICATION
     # ret, thresh = cv2.threshold(mask,0,255,cv2.THRESH_BINARY_INV+cv2.THRESH_OTSU)
@@ -80,7 +83,7 @@ for mask in masks:
     # plt.imshow(sure_fg,cmap = 'gray')
 
 
-    plt.imshow(mask,cmap = 'gray')
+    plt.imshow(th4,cmap = 'gray')
     plt.title('Camera Mask'), plt.xticks([]), plt.yticks([])
 
     plt.show()            
