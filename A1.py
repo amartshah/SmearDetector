@@ -40,6 +40,9 @@ for folder in os.listdir(path):
 masks = []
 #basic logic for canny edge detection
 for camera in camera_images:
+    #print camera order - dict is unordered
+    #print camera
+     
     canny_images = []
     for i in xrange(len(camera)):
         img = camera_images[camera][i]
@@ -52,14 +55,21 @@ for camera in camera_images:
         
         
 for mask in masks:
+    #uncomment below to also show intermediate results
+    # plt.figure()
+    # plt.title('Intermediate Mask'), plt.xticks([]), plt.yticks([])
+    # plt.imshow(mask,cmap = 'gray')
     mask = mask.astype(np.uint8)
-
+    
+    #apply gaussian filter
     mask = ndi.gaussian_filter(mask, (10,10))
+    #median blur
     mask = cv2.medianBlur(mask, 111)
-
+    
+    #binary thresholding
     ret4,th4 = cv2.threshold(mask,1,1,cv2.THRESH_BINARY)
-
+    plt.figure()
     plt.imshow(th4,cmap = 'gray')
-    plt.title('Camera Mask'), plt.xticks([]), plt.yticks([])
+    plt.title('Final Mask'), plt.xticks([]), plt.yticks([])
 
     plt.show()            
