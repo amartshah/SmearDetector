@@ -12,6 +12,9 @@ echo "backend : TkAgg" > ~/.matplotlib/matplotlibrc
 ##Run 
 python A1.py
 
+###File Hierarchy
+This script runs under the assumption that the unzipped rar file (with the 5 cameras' images) is within the same directory, and named 'sample_drive'
+
 ##Output
 A sequence of images that detect the camera lens smears of the five cameras in the sample_drive folder.
 
